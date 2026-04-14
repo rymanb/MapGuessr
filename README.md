@@ -1,5 +1,7 @@
 # MapGuessr - Historical Edition
 
+**[Play Now →](https://map-guessr-nine.vercel.app/)**
+
 A GeoGuessr-style browser game built on [OpenHistoricalMap](https://www.openhistoricalmap.org/). You're shown a historical map from anywhere between antiquity and the present day - study the borders, country names, and geography, then guess the year it depicts.
 
 ## How to Play
