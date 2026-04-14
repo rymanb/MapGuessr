@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const path = req.url.replace(/^\/api\/flaglog/, '') || '/'
+  const path = req.query.path ? `/${req.query.path}` : '/'
   const url = `https://flaglog.com${path}`
 
   const response = await fetch(url, {

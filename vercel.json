@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/flaglog/:path*", "destination": "/api/flaglog/:path*" }
+    { "source": "/flaglog/:path*", "destination": "/api/flaglog?path=:path*" }
   ]
 }
