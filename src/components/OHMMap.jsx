@@ -215,7 +215,7 @@ function flaglogKeys(name) {
   keys.add(lower.replace(/ /g, ''))
 
   const stripped = lower
-    .replace(/\b(empire|kingdom|republic|peoples|regency|democratic|soviet|union|federation|sultanate|caliphate|raj|dominion|principality|protectorate|duchy|grand|tsardom|county|margraviate|commonwealth|colony|province|territory|mandate|khanate|emirate|of the|of)\b/g, '')
+    .replace(/\b(empire|kingdom|republic|peoples|regency|democratic|soviet|union|federation|sultanate|caliphate|raj|dominion|principality|protectorate|duchy|grand|tsardom|county|margraviate|commonwealth|colony|province|territory|mandate|khanate|emirate|reich|of the|of)\b/g, '')
     .replace(/\s+/g, ' ').trim()
   keys.add(stripped.replace(/ /g, ''))
 
