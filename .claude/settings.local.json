@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npx create-vite@latest . --template react --force)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(npx create-vite@latest . --template react)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:www.openhistoricalmap.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:wiki.openstreetmap.org)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/AbelVM/maplibre-preload/main/src/maplibre-preload.js\" -o \"c:/Users/boney/Desktop/Mapguessr/src/lib/maplibre-preload.js\")",
+      "Bash(curl -L \"https://raw.githubusercontent.com/AbelVM/maplibre-preload/main/src/maplibre-preload.js\" -o \"c:/Users/boney/Desktop/Mapguessr/src/lib/maplibre-preload.js\")",
+      "WebFetch(domain:maplibre.org)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:vtiles.openhistoricalmap.org)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:flaglog.com)",
+      "Bash(npx vite:*)"
+    ]
+  }
+}

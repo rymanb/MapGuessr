@@ -1,0 +1,59 @@
+.year-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.slider-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+  min-width: 32px;
+  text-align: center;
+}
+
+.year-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #6366f1 0%,
+    #6366f1 var(--pct),
+    rgba(255,255,255,0.1) var(--pct),
+    rgba(255,255,255,0.1) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.year-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.35);
+}
+
+.year-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+}

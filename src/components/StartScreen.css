@@ -1,0 +1,121 @@
+.start-screen {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.start-map-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Dark gradient vignette over the map */
+.start-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at center, rgba(15,17,23,0.55) 0%, rgba(15,17,23,0.82) 100%);
+}
+
+.start-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(26, 29, 46, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 48px 52px;
+  max-width: 460px;
+  width: 90%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+}
+
+.start-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.start-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.start-subtitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6366f1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.start-desc {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  line-height: 1.65;
+}
+
+.rules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.rule-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.rule-text {
+  font-size: 0.83rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.start-btn {
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 4px;
+}
+
+.start-btn:hover {
+  background: #4f46e5;
+}
+
+.start-btn:active {
+  transform: scale(0.97);
+}
