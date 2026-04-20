@@ -57,15 +57,7 @@ function stripDeadLayers(style) {
   deadSources.forEach(k => delete style.sources[k])
 }
 
-const COUNTRY_PALETTE = (() => {
-  const GOLDEN_ANGLE = 137.508
-  return Array.from({ length: 50 }, (_, i) => {
-    const h = (i * GOLDEN_ANGLE) % 360
-    const s = 52 + (i % 3) * 9
-    const l = 53 - (i % 2) * 8
-    return `hsl(${Math.round(h)},${s}%,${l}%)`
-  })
-})()
+const GOLDEN_INT = 137 // integer approximation of golden angle for MapLibre expressions
 
 function addAdminPolygonsToStyle(style) {
   style.sources['ohm_admin'] = {
@@ -75,10 +67,14 @@ function addAdminPolygonsToStyle(style) {
     maxzoom: 5,
   }
 
+  // Derive a stable index from area_km2, multiply by golden angle to spread hues
+  const areaInt = ['floor', ['to-number', ['get', 'area_km2'], 1]]
+  const idx = ['%', ['*', areaInt, GOLDEN_INT], 360]
   const colorExpr = [
-    'match', ['%', ['abs', ['to-number', ['id'], 777]], COUNTRY_PALETTE.length],
-    ...COUNTRY_PALETTE.flatMap((c, i) => [i, c]),
-    COUNTRY_PALETTE[0],
+    'hsl',
+    idx,
+    ['case', ['==', ['%', areaInt, 3], 0], 52, ['==', ['%', areaInt, 3], 1], 61, 70],
+    ['case', ['==', ['%', areaInt, 2], 0], 53, 45],
   ]
 
   // Insert below country labels so text stays on top
@@ -510,5 +506,3 @@ export default function OHMMap({ filterDate, center, zoom }) {
     </div>
   )
 }
-
-export { COUNTRY_PALETTE, addAdminPolygonsToStyle }
