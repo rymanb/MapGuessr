@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import { constrainFilterByDateRange, dateRangeFromDate } from '@openhistoricalmap/maplibre-gl-dates'
+import { COUNTRY_PALETTE, addAdminPolygonsToStyle } from './OHMMap'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './StartScreen.css'
 
@@ -33,6 +34,9 @@ export default function StartScreen({ onStart }) {
         )
         style.layers = style.layers.filter(l => !deadSources.has(l.source) && l.type !== 'hillshade')
         deadSources.forEach(k => delete style.sources[k])
+
+        // Add colored admin polygons
+        addAdminPolygonsToStyle(style)
 
         const map = new maplibregl.Map({
           container: containerRef.current,
@@ -77,12 +81,12 @@ export default function StartScreen({ onStart }) {
       <div className="start-card">
         <div className="start-heading">
           <h1 className="start-title">MapGuessr</h1>
-          <p className="start-subtitle">Historical Edition</p>
+          <p className="start-subtitle">Guess the year</p>
         </div>
 
         <p className="start-desc">
           You'll be shown a historical map from anywhere between antiquity and the present day.
-          Study the borders, names, and geography - then guess the year it depicts.
+          Try to guess the year it is from.
         </p>
 
         <div className="rules-grid">

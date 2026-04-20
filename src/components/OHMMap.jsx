@@ -510,3 +510,5 @@ export default function OHMMap({ filterDate, center, zoom }) {
     </div>
   )
 }
+
+export { COUNTRY_PALETTE, addAdminPolygonsToStyle }
