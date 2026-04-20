@@ -11,6 +11,10 @@ export default function App() {
   const [usedYears, setUsedYears] = useState([])
 
   function calcScore(diff, targetYear) {
+    if (targetYear >= 1900) {
+      // Max error = 8 yrs; quadratic dropoff so precision is heavily rewarded
+      return Math.max(0, Math.round(5000 * Math.pow(Math.max(0, 1 - diff / 12), 1.5)))
+    }
     const halflife = targetYear >= 1700 ? 15 : targetYear >= 1000 ? 35 : 60
     return Math.max(0, Math.round(5000 * Math.pow(0.5, diff / halflife)))
   }
