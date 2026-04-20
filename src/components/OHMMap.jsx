@@ -57,7 +57,6 @@ function stripDeadLayers(style) {
   deadSources.forEach(k => delete style.sources[k])
 }
 
-const GOLDEN_INT = 137 // integer approximation of golden angle for MapLibre expressions
 
 function addAdminPolygonsToStyle(style) {
   style.sources['ohm_admin'] = {
@@ -65,16 +64,35 @@ function addAdminPolygonsToStyle(style) {
     tiles: ['https://vtiles.openhistoricalmap.org/maps/ohm_admin/{z}/{x}/{y}.pbf'],
     minzoom: 0,
     maxzoom: 5,
+    promoteId: { boundaries: 'name_en' },
   }
 
-  // Derive a stable index from area_km2, multiply by golden angle to spread hues
-  const areaInt = ['floor', ['to-number', ['get', 'area_km2'], 1]]
-  const idx = ['%', ['*', areaInt, GOLDEN_INT], 360]
+  // Golden-angle palette of 50 CSS color strings — safe for MapLibre fill-color
+  const PALETTE = Array.from({ length: 50 }, (_, i) => {
+    const h = (i * 137.508) % 360
+    const s = 52 + (i % 3) * 9
+    const l = 53 - (i % 2) * 8
+    return `hsl(${Math.round(h)},${s}%,${l}%)`
+  })
+
+  // Hash country name to a float index in [0, 50) using character positions × primes.
+  // Uses step (threshold comparisons) instead of match (exact equality) so floats work.
+  const nm = ['downcase', ['coalesce', ['get', 'name_en'], ['get', 'name'], 'x']]
+  const hashVal = ['%', ['+',
+    ['*', ['length', nm], 137],
+    ['*', ['max', ['index-of', 'a', nm], 0], 103],
+    ['*', ['max', ['index-of', 'e', nm], 0], 79],
+    ['*', ['max', ['index-of', 'i', nm], 0], 61],
+    ['*', ['max', ['index-of', 'o', nm], 0], 43],
+    ['*', ['max', ['index-of', 'r', nm], 0], 31],
+    ['*', ['max', ['index-of', 'n', nm], 0], 23],
+  ], PALETTE.length]
+
+  // step: returns PALETTE[0] if hashVal < 1, PALETTE[1] if 1 ≤ hashVal < 2, etc.
   const colorExpr = [
-    'hsl',
-    idx,
-    ['case', ['==', ['%', areaInt, 3], 0], 52, ['==', ['%', areaInt, 3], 1], 61, 70],
-    ['case', ['==', ['%', areaInt, 2], 0], 53, 45],
+    'step', hashVal,
+    PALETTE[0],
+    ...PALETTE.slice(1).flatMap((c, i) => [i + 1, c]),
   ]
 
   // Insert below country labels so text stays on top
@@ -199,6 +217,11 @@ const FLAG_ALIASES = {
   'united states':            ['unitedstates'],
   'united states of america': ['unitedstates'],
   'republic of china':        ['republicofchina', 'taiwan'],
+  'french republic':          ['france'],
+  'second french republic':   ['france'],
+  'third french republic':    ['france'],
+  'fourth french republic':   ['france'],
+  'fifth french republic':    ['france'],
 }
 
 // Returns all candidate keys to search for in flaglog filenames
@@ -211,7 +234,7 @@ function flaglogKeys(name) {
   keys.add(lower.replace(/ /g, ''))
 
   const stripped = lower
-    .replace(/\b(empire|kingdom|republic|peoples|regency|democratic|soviet|union|federation|sultanate|caliphate|raj|dominion|principality|protectorate|duchy|grand|tsardom|county|margraviate|commonwealth|colony|province|territory|mandate|khanate|emirate|reich|of the|of)\b/g, '')
+    .replace(/\b(duchy|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|empire|kingdom|republic|peoples|regency|democratic|soviet|union|federation|sultanate|caliphate|raj|dominion|principality|protectorate|duchy|grand|tsardom|county|margraviate|commonwealth|colony|province|territory|mandate|khanate|emirate|reich|of the|of)\b/g, '')
     .replace(/\s+/g, ' ').trim()
   keys.add(stripped.replace(/ /g, ''))
 
@@ -309,9 +332,9 @@ async function fetchFlags(name, year) {
       return [...named, ...exact]
     }
 
-    // If the name contains a hyphen, look up each part separately
-    if (name.includes('-')) {
-      const parts = name.split('-').map(p => p.trim()).filter(Boolean)
+    // If the name contains a hyphen or dash, look up each part separately
+    if (/[-–—]/.test(name)) {
+      const parts = name.split(/[-–—]/).map(p => p.trim()).filter(Boolean)
       const results = []
       for (const part of parts) {
         const m = findMatches(part)
@@ -326,6 +349,19 @@ async function fetchFlags(name, year) {
     const matches = findMatches(name)
     if (matches.length) {
       return await Promise.all(matches.map(async m => ({ label: m.label, url: await blobUrl(m.src) })))
+    }
+
+    // For "X and Y" compound states, try each part individually
+    if (name.toLowerCase().includes(' and ')) {
+      const parts = name.split(/\s+and\s+/i).map(p => p.trim()).filter(Boolean)
+      const results = []
+      for (const part of parts) {
+        const m = findMatches(part)
+        if (m.length) results.push(m[0])
+      }
+      if (results.length) {
+        return await Promise.all(results.map(async m => ({ label: m.label, url: await blobUrl(m.src) })))
+      }
     }
   } catch {
     // flaglog failed, fall through to Commons

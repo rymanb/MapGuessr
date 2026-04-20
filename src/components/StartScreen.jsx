@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import { constrainFilterByDateRange, dateRangeFromDate } from '@openhistoricalmap/maplibre-gl-dates'
-import { COUNTRY_PALETTE, addAdminPolygonsToStyle } from './OHMMap'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './StartScreen.css'
 
@@ -34,9 +33,6 @@ export default function StartScreen({ onStart }) {
         )
         style.layers = style.layers.filter(l => !deadSources.has(l.source) && l.type !== 'hillshade')
         deadSources.forEach(k => delete style.sources[k])
-
-        // Add colored admin polygons
-        addAdminPolygonsToStyle(style)
 
         const map = new maplibregl.Map({
           container: containerRef.current,
